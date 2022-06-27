@@ -40,7 +40,6 @@ class _GHFlutterState extends State<GHFlutter> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loadData();
   }
