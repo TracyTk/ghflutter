@@ -11,14 +11,7 @@ class GHFlutterApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: strings.appTitle,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(strings.appTitle),
-        ),
-        body: const Center(
-          child: Text(strings.appTitle),
-        ),
-      ),
+      home: const GHFlutter(),
     );
   }
 }
@@ -104,6 +97,25 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class GHFlutter extends StatefulWidget {
+  const GHFlutter({Key? key}) : super(key: key);
+
+  @override
+  _GHFlutterState createState() => _GHFlutterState();
+}
+
+class _GHFlutterState extends State<GHFlutter> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(strings.appTitle),
+      ),
+      body: const Text(strings.appTitle),
     );
   }
 }
