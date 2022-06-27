@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'strings.dart' as strings;
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(const GHFlutterApp());
 
@@ -109,13 +111,41 @@ class GHFlutter extends StatefulWidget {
 }
 
 class _GHFlutterState extends State<GHFlutter> {
+  var _members = <dynamic>[];
+  final _biggerFont = const TextStyle(fontSize: 18.0);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(strings.appTitle),
       ),
-      body: const Text(strings.appTitle),
+      body: ListView.builder(
+          padding: const EdgeInsets.all(16.0),
+          itemCount: _members.length,
+          itemBuilder: (BuildContext context, int position) {
+            return _buildRow(position);
+          }),
+    );
+  }
+
+  Future<void> _loadData() async {
+    const dataUrl = 'http://api.github.com/orgs/raywenderlich/members';
+    final response = await http.get(Uri.parse(dataUrl));
+    setState(() {
+      _members = json.decode(response.body) as List;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadData();
+  }
+
+  Widget _buildRow(int i) {
+    return ListTile(
+      title: Text('${_members[i]['login']}', style: _biggerFont),
     );
   }
 }
