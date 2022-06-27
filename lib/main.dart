@@ -111,7 +111,7 @@ class GHFlutter extends StatefulWidget {
 }
 
 class _GHFlutterState extends State<GHFlutter> {
-  var _members = <dynamic>[];
+  final _members = <Member>[];
   final _biggerFont = const TextStyle(fontSize: 18.0);
   @override
   Widget build(BuildContext context) {
@@ -134,7 +134,13 @@ class _GHFlutterState extends State<GHFlutter> {
     const dataUrl = 'http://api.github.com/orgs/raywenderlich/members';
     final response = await http.get(Uri.parse(dataUrl));
     setState(() {
-      _members = json.decode(response.body) as List;
+      final dataList = json.decode(response.body) as List;
+      for (final item in dataList) {
+        final login = item['login'] as String? ?? '';
+        final url = item['avatar_url'] as String? ?? '';
+        final member = Member(login, url);
+        _members.add(member);
+      }
     });
   }
 
@@ -149,8 +155,18 @@ class _GHFlutterState extends State<GHFlutter> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: ListTile(
-        title: Text('${_members[i]['login']}', style: _biggerFont),
+        title: Text('${_members[i].login}', style: _biggerFont),
+        leading: CircleAvatar(
+          backgroundColor: Colors.green,
+          backgroundImage: NetworkImage(_members[i].avatarUrl),
+        ),
       ),
     );
   }
+}
+
+class Member {
+  Member(this.login, this.avatarUrl);
+  final String login;
+  final String avatarUrl;
 }
